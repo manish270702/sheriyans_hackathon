@@ -12,7 +12,7 @@ function Cart({ closeCart }) {
 
   const checkoutHandler = async () => {
     try {
-      const res = await fetch('http://your-backend-name.onrender.com/api/orders', {
+      const res = await fetch('http://backend.onrender.com/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
