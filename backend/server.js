@@ -14,7 +14,7 @@ const app = express();
 // Middleware
 
 app.use(cors({
-  origin: 'http://localhost:5173', // React dev server
+  origin: 'https://sheriyans-hackathon-8rd7.vercel.app/', // React dev server
   credentials: true,
 }));
 
