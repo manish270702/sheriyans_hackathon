@@ -1,0 +1,8 @@
+@import "tailwindcss";
+body {
+  cursor: none;
+}
+
+button{
+  cursor:none;
+}
