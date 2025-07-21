@@ -15,7 +15,7 @@ function Login() {
 
   const onSubmit = async (data) => {
   try {
-    const res = await fetch('http://backend.onrender.com/api/auth/login', {
+    const res = await fetch('http://sheriyans_hackathon.onrender.com/api/auth/login', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include', // necessary for cookies
