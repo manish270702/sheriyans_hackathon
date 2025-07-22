@@ -17,6 +17,7 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
+// Place Order Route
 router.post('/', authMiddleware, async (req, res) => {
   const { items, total } = req.body;
 
@@ -31,6 +32,7 @@ router.post('/', authMiddleware, async (req, res) => {
 
     res.status(201).json({ message: 'Order placed successfully' });
   } catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Server error' });
   }
 });

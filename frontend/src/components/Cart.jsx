@@ -2,7 +2,8 @@ import React from 'react';
 import Item from './Item';
 import { FiX } from 'react-icons/fi';
 import { useSelector, useDispatch } from 'react-redux';
-import { clearCart } from '../store/reducers/cartSlice'; // update the path if needed
+import { clearCart } from '../store/reducers/cartSlice';
+import { toast } from 'react-toastify';
 
 function Cart({ closeCart }) {
   const cartItems = useSelector((state) => state.cart.items);
@@ -10,28 +11,37 @@ function Cart({ closeCart }) {
 
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-  const checkoutHandler = async () => {
+  const placeOrder = async () => {
     try {
+      const orderData = {
+        items: cartItems.map((item) => ({
+          productId: item._id || item.id,
+          quantity: item.quantity,
+        })),
+        total,
+      };
+
       const res = await fetch('http://sheriyans_hackathon.onrender.com/api/orders', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        credentials: 'include',
-        body: JSON.stringify({
-          items: cartItems,
-          total,
-        }),
+        credentials: 'include', // Send cookies (JWT)
+        body: JSON.stringify(orderData),
       });
 
       const result = await res.json();
-      if (!res.ok) throw new Error(result.message || 'Checkout failed');
 
-      alert('Order placed successfully!');
-      dispatch(clearCart()); // ✅ clear cart
-      closeCart(); // ✅ close cart UI
+      if (!res.ok) {
+        toast.error(result.message || 'Failed to place order');
+        return;
+      }
+
+      toast.success(result.message || '🎉 Order placed successfully!');
+      dispatch(clearCart());
+      closeCart(); // Optionally close cart after order
     } catch (err) {
-      alert(err.message);
+      toast.error('Something went wrong. Please try again!');
     }
   };
 
@@ -60,7 +70,7 @@ function Cart({ closeCart }) {
               <span>₹{total.toFixed(2)}</span>
             </div>
             <button
-              onClick={checkoutHandler}
+              onClick={placeOrder}
               className="w-full py-3 bg-blue-600 hover:bg-blue-700 transition rounded-md text-white font-semibold"
             >
               Checkout
